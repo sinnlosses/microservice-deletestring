@@ -1,2 +1,2 @@
 # microservise-separatestring
-文字列から指定した文字列を削除する
+文字列の左右から指定した文字列を削除する
