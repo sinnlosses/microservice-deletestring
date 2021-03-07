@@ -36,14 +36,16 @@ function getDocumentId(id:string):HTMLInputElement{
 /**
  * 操作すべき行か判定する.
  * @param text 判定する対象テキスト
- * @param commentSymbol コメント文字列
+ * @param comment コメント文字列
  */
- function isTargetRow(text:string, commentSymbol:string):boolean{
-    if (!text.match(commentSymbol)){
+ function isTargetRow(text:string, comment:string):boolean{
+    if (!text.match(comment)){
         return false;
     }
-    if (text.trim().startsWith(commentSymbol)){
+    if (text.trim().startsWith(comment)){
         return false;
     }
     return true;
 }
+
+

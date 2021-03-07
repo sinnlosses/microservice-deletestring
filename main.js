@@ -30,13 +30,13 @@ function getDocumentId(id) {
 /**
  * 操作すべき行か判定する.
  * @param text 判定する対象テキスト
- * @param commentSymbol コメント文字列
+ * @param comment コメント文字列
  */
-function isTargetRow(text, commentSymbol) {
-    if (!text.match(commentSymbol)) {
+function isTargetRow(text, comment) {
+    if (!text.match(comment)) {
         return false;
     }
-    if (text.trim().startsWith(commentSymbol)) {
+    if (text.trim().startsWith(comment)) {
         return false;
     }
     return true;
