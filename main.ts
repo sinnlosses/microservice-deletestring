@@ -6,8 +6,15 @@ function execute():void{
     const inputRows:string[] = inputText.split("\n");
     const leftString:string = getDocumentId("leftString").value;
     const rightString:string = getDocumentId("rightString").value;
+    const commentSymbol:string = getDocumentId("commentSymbol").value;
 
     for (let i = 0; i < inputRows.length; i++){
+
+        // 対象の行でない場合は除く
+        if (!isTargetRow(inputRows[i], commentSymbol)){
+            continue;
+        }
+
         var deleteString:string = inputRows[i].replace(leftString,"")
         const position:number = deleteString.lastIndexOf(rightString)
         deleteString = deleteString.substr(0,position)
@@ -25,3 +32,20 @@ function execute():void{
 function getDocumentId(id:string):HTMLInputElement{
     return <HTMLInputElement>document.getElementById(id);
 }
+
+/**
+ * 操作すべき行か判定する.
+ * @param text 判定する対象テキスト
+ * @param comment コメント文字列
+ */
+ function isTargetRow(text:string, comment:string):boolean{
+    if (!text.match(comment)){
+        return false;
+    }
+    if (text.trim().startsWith(comment)){
+        return false;
+    }
+    return true;
+}
+
+
