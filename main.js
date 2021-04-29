@@ -9,9 +9,16 @@ function execute() {
     var commentSymbol = getDocumentId("commentSymbol").value == "" ? "//" : getDocumentId("commentSymbol").value;
     var deleteString;
     for (var i = 0; i < inputRows.length; i++) {
-        // コメントが指定されている行は除く
+        var commentString = "";
+        // コメントされている行は除く
         if (!isTargetRow(inputRows[i], commentSymbol)) {
             continue;
+        }
+        // 右側にコメントがある場合、コメント文字列として退避させておく
+        var position = isComment(inputRows[i], commentSymbol);
+        if (position != 0) {
+            commentString = inputRows[i].substr(position, inputRows[i].length);
+            inputRows[i] = inputRows[i].replace(commentString, "");
         }
         // 左側の文字列が指定されている場合
         if (leftString.length != 0) {
@@ -29,7 +36,7 @@ function execute() {
                 deleteString = deleteString.substr(0, position);
             }
         }
-        inputRows[i] = deleteString;
+        inputRows[i] = deleteString + commentString;
     }
     var outputTextarea = getDocumentId("outputTextarea");
     outputTextarea.value = inputRows.join("\n");
@@ -51,6 +58,19 @@ function isTargetRow(text, commentSymbol) {
         return false;
     }
     return true;
+}
+/**
+ * コメントか判定する.
+ * @param text 判定する対象テキスト
+ * @param commentSymbol コメント判定に使う文字列
+ */
+function isComment(text, commentSymbol) {
+    var position = 0;
+    if (text.match(commentSymbol)) {
+        position = text.lastIndexOf(commentSymbol);
+        return position;
+    }
+    return position;
 }
 /**
  * 左側の文字列が削除対象か判定する.
