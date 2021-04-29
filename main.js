@@ -36,7 +36,7 @@ function execute() {
                 deleteString = deleteString.substr(0, position);
             }
         }
-        inputRows[i] = deleteString + commentString;
+        inputRows[i] = deleteString + " " + commentString;
     }
     var outputTextarea = getDocumentId("outputTextarea");
     outputTextarea.value = inputRows.join("\n");

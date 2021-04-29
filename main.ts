@@ -42,7 +42,7 @@
             }  
         }
 
-        inputRows[i] = deleteString + commentString;
+        inputRows[i] = deleteString +　" " + commentString;
     }
 
     let outputTextarea:HTMLInputElement = getDocumentId("outputTextarea");
