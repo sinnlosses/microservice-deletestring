@@ -2,47 +2,47 @@
  * 削除処理を実行する.
  */
  function execute():void{
-    const inputText:string = getDocumentId("inputTextarea").value;
-    const inputRows:string[] = inputText.split("\n");
+    const inputTextArea:string = getDocumentId("inputTextarea").value;
+    const inputRows:string[] = inputTextArea.split("\n");
     const leftString:string = getDocumentId("leftString").value;
     const rightString:string = getDocumentId("rightString").value;
     const commentSymbol:string = getDocumentId("commentSymbol").value == "" ? "//" : getDocumentId("commentSymbol").value;
-    var deleteString:string;
     
     for (let i = 0; i < inputRows.length; i++){
-        var commentString:string = "";
-
         // コメントされている行は除く
         if (!isTargetRow(inputRows[i], commentSymbol)){
             continue;
         }
 
+        // 対象テキストのコメント退避用
+        let commentString:string = "";
+
         // 右側にコメントがある場合、コメント文字列として退避させておく
-        var position:number = isComment(inputRows[i], commentSymbol)
-        if(position != 0){
-            commentString = inputRows[i].substr(position,inputRows[i].length)
+        let commentPosition:number = findComment(inputRows[i], commentSymbol)
+        if(commentPosition > 0){
+            commentString = inputRows[i].substr(commentPosition,inputRows[i].length)
             inputRows[i] = inputRows[i].replace(commentString,"")
         }
 
+        // 出力文字列格納用
+        let deletedString:string = inputRows[i];
+
         // 左側の文字列が指定されている場合
-        if(leftString.length != 0){
+        if(leftString.length > 0){
             if(isTargetRowLeft(inputRows[i], leftString)){
-                deleteString = inputRows[i].replace(leftString,"")
-            }
-            else{
-                deleteString = inputRows[i]
+                deletedString = inputRows[i].replace(leftString,"")
             }
         }
 
         // 右側の文字列が指定されている場合
-        if(rightString.length != 0){
-            var position:number = isTargetRowRight(deleteString, rightString)
+        if(rightString.length > 0){
+            let position:number = findLastIndexOfRightString(deletedString, rightString)
             if(position > 0){
-                deleteString = deleteString.substr(0,position)
+                deletedString = deletedString.substr(0,position)
             }  
         }
 
-        inputRows[i] = deleteString +　" " + commentString;
+        inputRows[i] = deletedString +　" " + commentString;
     }
 
     let outputTextarea:HTMLInputElement = getDocumentId("outputTextarea");
@@ -70,17 +70,13 @@ function getDocumentId(id:string):HTMLInputElement{
 }
 
 /**
- * コメントか判定する.
- * @param text 判定する対象テキスト
- * @param commentSymbol コメント判定に使う文字列
+ * テキストのコメントの位置を返す.
+ * コメントが含まれない場合は負の値を返す.
+ * @param text 対象テキスト
+ * @param commentSymbol コメント文字列
  */
- function isComment(text:string, commentSymbol:string):number{
-    var position:number = 0
-    if(text.match(commentSymbol)){
-        position = text.lastIndexOf(commentSymbol)
-        return position;
-    }
-    return position;
+ function findComment(text:string, commentSymbol:string):number{
+    return text.lastIndexOf(commentSymbol);
 }
 
 /**
@@ -89,25 +85,17 @@ function getDocumentId(id:string):HTMLInputElement{
  * @param leftString 判定に使う文字列
  */
  function isTargetRowLeft(text:string, leftString:string):boolean{
-    if (text.trim().startsWith(leftString)){
-        return true;
-    }
-    return false;
+    return text.trim().startsWith(leftString);
 }
 
 /**
- * 右側の文字列が削除対象か判定する.
+ * 対象文字列の右側の文字列の位置を返す.
+ * 右側の文字列が含まれない場合は負の値を返す.
  * @param text 判定する対象テキスト
  * @param rightString 判定に使う文字列
  */
- function isTargetRowRight(text:string, rightString:string):number{
-    const position:number = 0;
-
-    if(text.match(rightString)){
-        const position:number = text.lastIndexOf(rightString)
-        return position;
-    }    
-    return position;
+ function findLastIndexOfRightString(text:string, rightString:string):number{
+    return text.lastIndexOf(rightString);
 }
 
 
