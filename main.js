@@ -73,7 +73,7 @@ function findComment(text, commentSymbol) {
  * @param leftString 判定に使う文字列
  */
 function isTargetRowLeft(text, leftString) {
-    return text.trim().startsWith(leftString);
+    return text.startsWith(leftString);
 }
 /**
  * 対象文字列の右側の文字列の位置を返す.

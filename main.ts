@@ -85,7 +85,7 @@ function getDocumentId(id:string):HTMLInputElement{
  * @param leftString 判定に使う文字列
  */
  function isTargetRowLeft(text:string, leftString:string):boolean{
-    return text.trim().startsWith(leftString);
+    return text.startsWith(leftString);
 }
 
 /**
